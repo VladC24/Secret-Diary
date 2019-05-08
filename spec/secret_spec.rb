@@ -1,0 +1,3 @@
+describe SecretDiary do
+  
+end
