@@ -1,27 +1,38 @@
-class SecretDiary
-  attr_reader :entry, :entries, :locked, :unlocked
+require_relative 'secret_security'
 
-  def initialize
+class SecretDiary
+attr_reader :entry, :entries
+
+  def initialize(security_class = SecretSecurity)
+    @security = security_class.new    
   	@entry = entry
   	@entries = []
-    @locked = true
-    @unlocked = false
   end
 
-  def lock
-    @locked
-  end
-  
   def add_entry(entry)
+    raise "Can't add an entry. Diary is locked!" if locked?
     @entry = entry
   end
   
   def get_entries
-    raise "Diary is locked!" if lock
+    raise "Can't see the log. Diary is locked!" if locked?
     @entries << @entry
   end
   
-  def unlock
-    @locked = false
+  def locked?
+    @security.locked?
   end
+
+  def unlocked?
+    !@security.locked?
+  end
+  
+  def lock
+    @security.lock
+  end
+
+  def unlock
+    @security.unlock
+  end
+
 end
