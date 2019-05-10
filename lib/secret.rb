@@ -1,10 +1,11 @@
 class SecretDiary
-  attr_reader :entry, :entries
+  attr_reader :entry
 
   def initialize
   	@entry = entry
   	@entries = []
   end
+
   def lock
     locked = true
   end
@@ -13,4 +14,8 @@ class SecretDiary
     @entry = entry
   end
   
+  def get_entries
+    @entries << @entry
+  end
+
 end

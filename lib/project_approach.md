@@ -114,4 +114,63 @@ Failure/Error: expect(subject.add_entry).to eq("One of the best day at Makers to
 
 Return a string
 
+IRB Feature Test:
+
+```
+2.6.0 :001 > require './lib/secret.rb'
+ => true
+2.6.0 :002 > diary = SecretDiary.new
+ => #<SecretDiary:0x00007fb2ad12fa68 @entry=nil, @entries=[]>
+2.6.0 :003 > diary.add_entry("One of the best day at Makers today")
+ => "One of the best day at Makers today"
+```
+---
+
+Rspec Error:
+
+```
+Failure/Error: expect(subject.get_entries).to eq(entries)
+
+     NoMethodError:
+       undefined method `get_entries' for #<SecretDiary:0x00007f8ab11be4f8 @entry=nil, @entries=[]>
+     # ./spec/secret_spec.rb:19
+```
+
+Added get_entries method
+
+```
+Failure/Error: expect(subject.get_entries).to eq(:entries)
+
+       expected: :entries
+            got: [nil]
+
+       (compared using ==)
+
+       Diff:
+       @@ -1,2 +1,2 @@
+       -:entries
+       +[nil]
+
+     # ./spec/secret_spec.rb:19
+```
+
+Mocked the SecretDiary class to receive get_entries method and return an empty array
+
+IRB Feature Test:
+
+```
+2.6.0 :001 > require './lib/secret.rb'
+ => true
+2.6.0 :002 > diary = SecretDiary.new
+ => #<SecretDiary:0x00007fca4e937900 @entry=nil, @entries=[]>
+2.6.0 :003 > diary.add_entry("Hello, world!")
+ => "Hello, world!"
+2.6.0 :004 > diary.get_entries
+ => ["Hello, world!"]
+2.6.0 :005 > diary.add_entry("Hello, all")
+ => "Hello, all"
+2.6.0 :006 > diary.get_entries
+ => ["Hello, world!", "Hello, all"]
+```
+---
 

@@ -14,5 +14,11 @@ describe SecretDiary do
     end
   end
 
-  
+  describe '#get_entries' do
+    it 'gets an empty array' do
+      allow(subject).to receive(:get_entries).and_return([])
+      expect(subject.get_entries).to eq([])
+    end
+  end
+
 end
