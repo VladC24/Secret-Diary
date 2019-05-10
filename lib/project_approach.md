@@ -234,3 +234,72 @@ RuntimeError (Diary is locked!)
 2.6.0 :006 > diary.get_entries
  => ["Hello"]
 ```
+---
+
+Break SecretDiary class in two classes. Create another file, secret_security.rb for the SecretSecurity class which will use the funcionality methods of SecretDiary initial class (lock, unlock)
+
+```
+Failure/Error: expect(subject.lock).to eq(true)
+
+     NoMethodError:
+       undefined method `lock' for #<SecretSecurity:0x00007fa1a222c978>
+     # ./spec/secret_security_spec.rb:7
+```
+
+Created lock method in the SecretSecurity class.
+
+```
+Failure/Error: expect(subject.unlock).to eq(false)
+
+     NoMethodError:
+       undefined method `unlock' for #<SecretSecurity:0x00007fc82a983588 @locked=true>
+       Did you mean?  lock
+     # ./spec/secret_security_spec.rb:13
+```
+
+Created the unlock method for the SecretSecurity class. 
+Also, created a new instance variable in SecretDiary class which has the value of a new instance of the SecretSecurity class.
+
+At this point, the SecretDiary class has the lock and unlock methods calling on the SecretSecurity class methods lock and unlock.
+
+```
+Failure/Error: raise "Can't add an entry. Diary is locked!" if locked?
+
+     NoMethodError:
+       undefined method `locked?' for #<SecretDiary:0x00007f84889eb8a8>
+       Did you mean?  lock
+     # ./lib/secret.rb:13:in `add_entry'
+     # ./spec/secret_spec.rb:9
+```
+
+Created method locked? which will show whether the diary is locked or unlocked.
+
+All in all, I had to use stubs in order to allow the tests to work (see README file with the commits)
+
+IRB Feature Test:
+
+```
+2.6.0 :001 > require './lib/secret.rb'
+ => true
+2.6.0 :002 > diary = SecretDiary.new
+ => #<SecretDiary:0x00007f8bfe10f4a0 @security=#<SecretSecurity:0x00007f8bfe10f478 @locked=true>, @entry=nil, @entries=[]>
+2.6.0 :003 > diary.locked?
+ => true
+2.6.0 :004 > diary.unlock
+ => false
+2.6.0 :005 > diary.unlocked?
+ => true
+2.6.0 :006 > diary.add_entry("Hello!")
+ => "Hello!"
+2.6.0 :007 > diary.get_entries
+ => ["Hello!"]
+2.6.0 :008 > diary.add_entry("I made it!!!")
+ => "I made it!!!"
+2.6.0 :009 > diary.get_entries
+ => ["Hello!", "I made it!!!"]
+2.6.0 :010 > diary.lock
+ => true
+2.6.0 :011 > diary.locked?
+ => true
+```
+---
