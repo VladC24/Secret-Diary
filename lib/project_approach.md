@@ -72,5 +72,46 @@ IRB Feature Test:
 ---
 
 
+IRB Errors:
+
+```
+2.6.0 :001 > require './lib/secret.rb'
+ => true
+2.6.0 :002 > diary = SecretDiary.new
+ => #<SecretDiary:0x00007ff06990c728>
+2.6.0 :003 > diary.add_entry
+Traceback (most recent call last):
+        4: from /Users/kiri/.rvm/rubies/ruby-2.6.0/bin/irb:23:in `<main>'
+        3: from /Users/kiri/.rvm/rubies/ruby-2.6.0/bin/irb:23:in `load'
+        2: from /Users/kiri/.rvm/rubies/ruby-2.6.0/lib/ruby/gems/2.6.0/gems/irb-1.0.0/exe/irb:11:in `<top (required)>'
+        1: from (irb):3
+NoMethodError (undefined method `add_entry' for #<SecretDiary:0x00007ff06990c728>)
+```
+We start creating the Rspec test
+
+Rspec Errors:
+
+
+```
+Failure/Error: expect(subject.add_entry).to eq("One of the best day at Makers today!")
+
+     NoMethodError:
+       undefined method `add_entry' for #<SecretDiary:0x00007fb5ac1f2750>
+     # ./spec/secret_spec.rb:10
+```
+
+Added add_entry method
+
+```
+Failure/Error: expect(subject.add_entry).to eq("One of the best day at Makers today!")
+
+       expected: "One of the best day at Makers today!"
+            got: nil
+
+       (compared using ==)
+     # ./spec/secret_spec.rb:10
+```
+
+Return a string
 
 
