@@ -174,3 +174,63 @@ IRB Feature Test:
 ```
 ---
 
+IRB Error:
+
+```
+2.6.0 :001 > require './lib/secret.rb'
+ => true
+2.6.0 :002 > diary = SecretDiary.new
+ => #<SecretDiary:0x00007f8d61032708 @entry=nil, @entries=[]>
+2.6.0 :003 > diary.unlock
+Traceback (most recent call last):
+        4: from /Users/kiri/.rvm/rubies/ruby-2.6.0/bin/irb:23:in `<main>'
+        3: from /Users/kiri/.rvm/rubies/ruby-2.6.0/bin/irb:23:in `load'
+        2: from /Users/kiri/.rvm/rubies/ruby-2.6.0/lib/ruby/gems/2.6.0/gems/irb-1.0.0/exe/irb:11:in `<top (required)>'
+        1: from (irb):3
+NoMethodError (undefined method `unlock' for #<SecretDiary:0x00007f8d61032708 @entry=nil, @entries=[]>)
+Did you mean?  lock
+```
+
+
+Rspec Error:
+
+```
+ Failure/Error: expect(subject.unlock).to eq(true)
+
+     NoMethodError:
+       undefined method `unlock' for #<SecretDiary:0x00007f8e0aa7fd88 @entry=nil, @entries=[]>
+       Did you mean?  lock
+     # ./spec/secret_spec.rb:26
+```
+
+Added method unlock which calls false and unlocks the diary.
+
+```
+Failure/Error: expect(subject.get_entries).to raise_error("Diary is locked!")
+       expected Exception with "Diary is locked!" but was not given a block
+     # ./spec/secret_spec.rb:27
+```
+Added exception if the diary is locked
+
+IRB Feature Test:
+
+```
+2.6.0 :001 > require './lib/secret.rb'
+ => true
+2.6.0 :002 > diary = SecretDiary.new
+ => #<SecretDiary:0x00007f85dd11e828 @entry=nil, @entries=[], @locked=true, @unlocked=false>
+2.6.0 :003 > diary.add_entry("Hello")
+ => "Hello"
+2.6.0 :004 > diary.get_entries
+Traceback (most recent call last):
+        5: from /Users/kiri/.rvm/rubies/ruby-2.6.0/bin/irb:23:in `<main>'
+        4: from /Users/kiri/.rvm/rubies/ruby-2.6.0/bin/irb:23:in `load'
+        3: from /Users/kiri/.rvm/rubies/ruby-2.6.0/lib/ruby/gems/2.6.0/gems/irb-1.0.0/exe/irb:11:in `<top (required)>'
+        2: from (irb):4
+        1: from /Users/kiri/Documents/GitHub/secret-diary/lib/secret.rb:20:in `get_entries'
+RuntimeError (Diary is locked!)
+2.6.0 :005 > diary.unlock
+ => false
+2.6.0 :006 > diary.get_entries
+ => ["Hello"]
+```
